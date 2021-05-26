@@ -1,0 +1,48 @@
+---
+repos:
+- repo: https://github.com/ansible-community/ansible-lint.git
+  rev: v5.0.7
+  hooks:
+  - id: ansible-lint
+    files: \.(yaml|yml)$
+
+- repo: https://github.com/codespell-project/codespell
+  rev: v2.0.0
+  hooks:
+  - id: codespell
+    exclude: >
+      (?x)^(
+        collections/.*|
+        .cache/.*|
+        .*/user-data.j2 |
+        .githooks/pre-commit
+      )$
+
+- repo: https://github.com/jumanjihouse/pre-commit-hooks
+  rev: 2.1.5  # or specific git tag
+  hooks:
+  - id: shellcheck
+    exclude: >
+      (?x)^(
+        collections/.*|
+        .cache/.*
+      )$
+    args: [-e, SC1091]
+  # Roles are disabled due to ansible-nwd formating
+  - id: markdownlint
+    exclude: >
+      (?x)^(
+        collections/.*|
+        roles/.*|
+        .cache/.*
+      )$
+
+- repo: local
+  hooks:
+  - id: ansible-nwd
+    name: ansible-nwd gen README.md for roles
+    description: Generate README.md for roles
+    entry: .githooks/ansible-nwd-gen
+    language: python
+    additional_dependencies:
+      - ansible-nwd

@@ -1,0 +1,83 @@
+---
+- name: configure - system modifications
+  become: yes
+  become_user: root
+  block:
+
+  - name: configure[tools] - config mc and htop deploy
+    ansible.builtin.copy:
+      src: "{{ item.name }}"
+      dest: "{{ item.dest }}/.config"
+      owner: "{{ item.owner }}"
+      group: "{{ item.group }}"
+      mode: '0640'
+      directory_mode: '0700'
+    loop:
+      - { name: 'mc', dest: '/root',      owner: 'root', group: 'root' }
+      - { name: 'mc', dest: '/etc/skel',  owner: 'root', group: 'root' }
+      - { name: 'mc',
+          dest: "{{ provisioning_os_user.home }}",
+          owner: "{{ provisioning_os_user.user }}",
+          group: "{{ provisioning_os_user.group }}" }
+      - { name: 'htop',   dest: '/root',      owner: 'root', group: 'root' }
+      - { name: 'htop',   dest: '/etc/skel',  owner: 'root', group: 'root' }
+      - { name: 'htop',
+          dest: "{{ provisioning_os_user.home }}",
+          owner: "{{ provisioning_os_user.user }}",
+          group: "{{ provisioning_os_user.group }}" }
+
+  - name: configure[tools] - bash custom and alias file - deploy
+    become: yes
+    become_user: root
+    ansible.builtin.copy:
+      src: "{{ item.src }}"
+      dest: "{{ item.dest }}"
+      owner: root
+      group: root
+      mode: '0644'
+    loop:
+      - {src: 'z-custom.sh', dest: '/etc/profile.d/z-custom.sh' }
+      - {src: 'z-alias.sh', dest: '/etc/profile.d/z-alias.sh' }
+
+  - name: configure[tools] - shell default - change
+    ansible.builtin.lineinfile:
+      dest: /etc/default/useradd
+      line: 'SHELL=/bin/bash'
+      regexp: 'SHELL=.*'
+
+  - name: configure Ubuntu only
+    when:
+    - ansible_distribution == 'Ubuntu'
+    block:
+
+    - name: configure[tools] - bash prompt - update
+      ansible.builtin.copy:
+        src: .bashrc
+        dest: "{{ item.dest }}/.bashrc"
+        owner: "{{ item.owner }}"
+        group: "{{ item.group }}"
+        mode: '0644'
+      loop:
+        - { dest: '/root',      owner: 'root', group: 'root'  }
+        - { dest: '/etc/skel',  owner: 'root', group: 'root'  }
+        - { dest: "{{ provisioning_os_user.home }}",
+            owner: "{{ provisioning_os_user.user }}",
+            group: "{{ provisioning_os_user.group }}" }
+
+    - name: configure[tools] - home dir permissions - change
+      ansible.builtin.lineinfile:
+        dest: /etc/adduser.conf
+        line: "{{ item.line }}"
+        regexp: "{{ item.regexp }}"
+      loop:
+        - { regexp: 'DSHELL=.*', line: 'DSHELL=/bin/bash'     }
+        - { regexp: 'DIR_MODE=.*', line: 'DIR_MODE=0700'      }
+
+    - name: configure[tools] - permissions default to normal - change
+      ansible.builtin.lineinfile:
+        dest: /etc/login.defs
+        line: "{{ item.line }}"
+        regexp: "{{ item.regexp }}"
+      loop:
+        - { regexp: 'HOME_MODE.*',        line: 'HOME_MODE 0700'      }
+        - { regexp: 'USERGROUPS_ENAB.*',  line: 'USERGROUPS_ENAB no'  }

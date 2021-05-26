@@ -1,0 +1,8 @@
+---
+exclude_paths:
+- .cache/
+- collections/
+- backup
+
+# Offline mode disables installation of requirements.yml
+#offline: false

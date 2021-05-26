@@ -1,0 +1,3 @@
+127.0.0.1   localhost
+{{ hostvars[inventory_hostname].primary_ip4 }}    {{ hostvars[inventory_hostname].dns_name }} {{
+                                                     hostvars[inventory_hostname].dns_name.split('.')[:1]|join('.') }}

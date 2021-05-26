@@ -1,0 +1,8 @@
+---
+hostname: skbero01
+
+# Parameters for connection type network_cli
+# ansible_connection: ansible.netcommon.network_cli
+# ansible_network_os: vyos.vyos.vyos
+# ansible_user: vyos
+# ansible_password: apolloilo

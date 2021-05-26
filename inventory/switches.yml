@@ -1,0 +1,14 @@
+---
+all:
+  children:
+    os10_switches:
+      hosts:
+        skbets01:
+        skbets02:
+
+
+  hosts:
+    skbets01:
+      ansible_host: "10.227.59.21"
+    skbets02:
+      ansible_host: "10.227.59.22"

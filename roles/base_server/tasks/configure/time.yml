@@ -1,0 +1,59 @@
+---
+- name: configure - system time servers and zone - common
+  become: yes
+  become_user: root
+  block:
+
+  - name: configure[time] - timezone to {{ hostvars[inventory_hostname].time_zone }} - set
+    community.general.timezone:
+      name: "{{ hostvars[inventory_hostname].time_zone }}"
+
+  - name: configure - system time servers and zone
+    when:
+      - ansible_os_family == 'Debian'
+    block:
+
+    - name: configure[time] - chronyd config - deploy
+      ansible.builtin.template:
+        src: chrony.conf-ubuntu.j2
+        dest: /etc/chrony/chrony.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart chronyd
+
+    - name: configure[time] - chronyd config ip protocol - change
+      ansible.builtin.lineinfile:
+        path: /etc/default/chrony
+        state: present
+        regexp: 'DAEMON_OPTS=.*'
+        line: 'DAEMON_OPTS="-4 -F -1"'
+      notify: restart chronyd
+
+    - name: configure[time] - systemd ensure chronyd - started
+      ansible.builtin.systemd:
+        name: chronyd
+        state: started
+
+
+  - name: configure - system time servers and zone
+    when:
+      - ansible_os_family == 'RedHat'
+    block:
+
+    - name: configure[time] - chronyd config - deploy
+      ansible.builtin.template:
+        src: chrony.conf-centos.j2
+        dest: /etc/chrony.conf
+        owner: root
+        group: root
+        mode: '0644'
+      notify: restart chronyd
+
+    - name: configure[time] - chronyd config ip protocol - change
+      ansible.builtin.lineinfile:
+        path: /etc/sysconfig/chronyd
+        state: present
+        regexp: 'OPTIONS=.*'
+        line: 'OPTIONS="-4 -F -1"'
+      notify: restart chronyd

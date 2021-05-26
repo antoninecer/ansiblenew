@@ -1,0 +1,25 @@
+---
+- hosts: all
+  connection: local
+  name: ansible var files for leaves
+  vars_files:
+    - group_vars/ntp.yml
+    - group_vars/vlans.yml
+    - group_vars/connect.yml
+
+  tasks:
+#    - name: debug
+#      debug:
+#        msg:
+#        - "{{ [inventory_hostname] }}"
+#        - "{{ [ansible_host] }}, {{ [device_type] }}"
+#        - "{{ [interfaces[8].description] }}"
+#        - "{{ [interfaces[8].label] }}, {{ [interfaces[8].name] }}"
+    - name: generuj template
+      template:
+        src: templates/dell-os10-sw.j2
+        dest: ./host_vars/{{ inventory_hostname }}.yml
+
+#      when:
+#        - inventory_hostname == 'skbets01'
+      delegate_to: localhost

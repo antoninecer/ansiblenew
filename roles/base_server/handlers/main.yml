@@ -1,0 +1,42 @@
+---
+# handlers file for base_server
+- name: restart sshd
+  become: yes
+  become_user: root
+  ansible.builtin.systemd:
+    name: sshd.service
+    state: restarted
+
+- name: restart cron
+  become: yes
+  become_user: root
+  ansible.builtin.systemd:
+    name: cron.service
+    state: restarted
+
+- name: restart chronyd
+  become: yes
+  become_user: root
+  ansible.builtin.systemd:
+    name: chronyd.service
+    state: restarted
+
+- name: restart NetworkManager
+  become: yes
+  become_user: root
+  ansible.builtin.systemd:
+    name: NetworkManager.service
+    state: restarted
+
+# - name: restart-systemd-journald
+#   become: yes
+#   become_user: root
+#   service:
+#     name: systemd-journald.service
+#     state: restarted
+#   ignore_errors: true
+
+- name: trigger udevadm
+  become: yes
+  become_user: root
+  ansible.builtin.command: udevadm trigger

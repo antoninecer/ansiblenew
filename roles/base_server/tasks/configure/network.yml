@@ -1,0 +1,66 @@
+---
+- name: configure networking
+  become: yes
+  become_user: root
+  block:
+
+
+  - name: configure[network] - rename netplan/00-installer-config
+    ansible.builtin.command: mv /etc/netplan/00-installer-config.yaml /etc/netplan/eth0.yaml
+    args:
+      removes: /etc/netplan/00-installer-config.yaml
+      creates: /etc/netplan/eth0.yaml
+    # args:
+    #   removes: /etc/netplan/00-installer-config.yaml
+    #   creates: /etc/netplan/eth0.yaml
+    when:
+    - ansible_os_family == 'Debian'
+
+
+  - name: configure networking
+    when:
+      - ansible_os_family == 'RedHat'
+    block:
+    # - name: configure[network] - network manager
+    #   ansible.builtin.copy:
+    #     dest: '/etc/NetworkManager/conf.d/10-dns.conf'
+    #     content: |
+    #       [main]
+    #       dns=none
+    #     owner: root
+    #     group: root
+    #     mode: 0644
+    #   notify: restart NetworkManager
+
+    # - ansible.builtin.meta: flush_handlers
+
+    - name: configure[network] - dns servers after provision
+      community.general.nmcli:
+        conn_name: eth0
+        dns4: "{{ hostvars[inventory_hostname].ansible_dns.nameservers }}"
+        type: ethernet
+        state: present
+      notify: restart NetworkManager
+
+
+  - name: configure[network] - stop and disable systemd-resolved.service
+    ansible.builtin.systemd:
+      name: systemd-resolved.service
+      enabled:  no
+      state: stopped
+
+  - name: configure[network] - set hostname
+    ansible.builtin.hostname:
+      name: "{{ hostvars[inventory_hostname].dns_name }}"
+
+
+  - name: configure[network] - resolv.conf and hosts
+    ansible.builtin.template:
+      src: resolv.conf.j2
+      dest: /etc/resolv.conf
+      owner: root
+      group: root
+      mode: '0644'
+    loop:
+      - { template: 'resolv.conf.j2', dest: '/etc/resolv.conf' }
+      - { template: 'hosts.j2',       dest: '/etc/hosts'       }

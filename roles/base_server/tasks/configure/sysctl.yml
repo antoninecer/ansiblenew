@@ -1,0 +1,49 @@
+---
+# sysctl for base_server
+# - name: configure[sysctl] - set sysctl params
+#   become: yes
+#   become_user: root
+#   sysctl:
+#     name: "{{ item.name }}"
+#     value: "{{ item.value }}"
+#     sysctl_file: /etc/sysctl.d/10-base_server.conf
+#     reload: yes
+#   loop:
+#     - { name: 'net.ipv4.ip_forward',              value: '1' }
+#     - { name: 'vm.swappiness',                    value: '2' }
+#     - { name: 'vm.dirty_ratio',                   value: '40' }
+#     - { name: 'vm.dirty_background_ratio',        value: '15' }
+#     - { name: 'net.ipv4.tcp_fin_timeout',         value: '1' }
+#     - { name: 'net.core.rmem_max',                value: '16777216' }
+#     - { name: 'net.core.rmem_default',            value: '524288' }
+#     - { name: 'net.core.wmem_max',                value: '16777216' }
+#     - { name: 'net.core.wmem_default',            value: '524288' }
+#     - { name: 'net.core.netdev_max_backlog',      value: '262144' }
+#     - { name: 'net.core.somaxconn',               value: '65535' }
+#     - { name: 'net.ipv4.tcp_rmem',                value: '4096	524288	16777216' } # tabs are must here
+#     - { name: 'net.ipv4.tcp_wmem',                value: '4096	524288	16777216' } # tabs are must here
+#     - { name: 'net.ipv4.tcp_syncookies',          value: '1' }
+#     - { name: 'net.ipv4.tcp_max_orphans',         value: '262144' }
+#     - { name: 'net.ipv4.tcp_max_syn_backlog',     value: '262144' }
+#     - { name: 'net.ipv4.tcp_synack_retries',      value: '2' }
+#     - { name: 'net.ipv4.tcp_syn_retries',         value: '2' }
+#     - { name: 'net.ipv4.tcp_timestamps',          value: '1' }
+#     - { name: 'net.ipv4.tcp_window_scaling',      value: '1' }
+#     - { name: 'net.ipv4.tcp_sack',                value: '1' }
+#     - { name: 'net.ipv4.tcp_no_metrics_save',     value: '1' }
+#     - { name: 'net.ipv4.tcp_moderate_rcvbuf',     value: '1' }
+#     - { name: 'net.ipv4.tcp_reordering',          value: '20' }
+#     - { name: 'net.ipv4.tcp_congestion_control',  value: 'bbr' }
+#     - { name: 'net.core.default_qdisc',           value: 'fq' }
+#     - { name: 'vm.vfs_cache_pressure',            value: '50' }
+
+- name: configure[sysctl] - sysctl params - set
+  become: yes
+  become_user: root
+  ansible.builtin.copy:
+    dest: '/etc/sysctl.d/10-base_server.conf'
+    src: 'sysctl-10-base_server.conf'
+    owner: 'root'
+    group: 'root'
+    mode: '0644'
+    validate: sysctl --load=%s

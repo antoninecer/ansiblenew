@@ -1,0 +1,16 @@
+---
+ansible_python_interpreter: /usr/bin/python3
+
+provisioning_os_user:
+  user: "{{ ansible_user }}"
+  group: "{{ ansible_user }}"
+  home: "/home/{{ ansible_user }}"
+
+deployment_os_user:
+  user: "{{ ansible_user }}"
+  group: "{{ ansible_user }}"
+  home: "/home/{{ ansible_user }}"
+
+
+db_name_vlt: 'apollo'           # define vlt database name;string;'apollo';true
+db_name_wc: 'casino'            # define wc database name;string;'casino';true

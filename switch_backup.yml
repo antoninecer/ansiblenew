@@ -1,0 +1,15 @@
+---
+- hosts: os10_switches
+
+  connection: network_cli
+  collections:
+    - dellemc.os10
+  tasks:
+    - name: run backup and store on local
+      os10_config:
+        lines: ['hostname {{ inventory_hostname }}']
+        backup: yes
+
+  vars:
+    os10_cfg_generate: yes
+    build_dir: /home/tonda/dell/build

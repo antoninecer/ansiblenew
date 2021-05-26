@@ -1,0 +1,52 @@
+---
+plugin: netbox.netbox.nb_inventory
+api_endpoint: http://netbox.host.apollo.server:80
+token: 1180fa3d1315cf80f28bd59f46ed96e19e51d6d6
+validate_certs: no
+# validate_certs: True
+
+###
+config_context: yes
+flatten_config_context: yes
+# flatten_custom_fields: yes
+flatten_local_context_data: yes
+# group_names_raw: yes
+interfaces: yes
+plurals: no
+services: no
+strict: yes
+###
+
+
+# ansible_host_dns_name: yes
+# dns_name: yes
+group_by:
+#   - device_roles
+#   - sites
+#   - cluster_group
+#   - cluster
+#   - ip-addresses
+  - tenant
+  - role
+query_filters:
+  # - role: hypervizor
+  # - role: vmserver
+  - role: vm-base
+  - role: vm-fw
+  - role: vm-app
+  - role: vm-postgres
+  - role: vm-mysql
+  # - role: hypervizor
+  # - cluster_id: 1
+  - tenant: playtech-cz-dev
+# device_query_filters:
+#   - has_primary_ip: 'true'
+# device_query_filters: #[offline, active, planned, staged, failed, decommisioning]
+#    - status: 'active'
+
+compose:
+  primary_ipv4_cidr: primary_ip4.address
+
+# keyed_groups:
+#   - prefix: cluster
+#     key: cluster.url

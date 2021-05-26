@@ -1,0 +1,10 @@
+---
+- hosts: vyos_routers
+
+  connection: network_cli
+  gather_facts: 'no'
+
+  tasks:
+    - name: run backup and store on local
+      vyos_config:
+        backup: yes

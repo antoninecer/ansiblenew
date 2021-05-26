@@ -1,0 +1,7 @@
+---
+hostname: beskro02
+
+# Parameters for connection type network_cli
+# ansible_ssh_user: vyos
+# ansible_ssh_pass: apolloilo
+# ansible_network_os: vyos.vyos.vyos

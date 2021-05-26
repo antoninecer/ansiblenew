@@ -1,0 +1,87 @@
+---
+# packages for base_server
+- name: packages for host and guest systems
+  become: yes
+  become_user: root
+  block:
+
+  - name: install - import key EPEL
+    ansible.builtin.rpm_key:
+      key: /etc/pki/rpm-gpg/RPM-GPG-KEY-oracle
+    when:
+      - ansible_distribution == 'OracleLinux'
+
+  - name: install - packages EPEL
+    ansible.builtin.dnf:
+      name:
+        - oracle-epel-release-el8
+    when:
+      - ansible_distribution == 'OracleLinux'
+
+  - name: install - packages EPEL
+    ansible.builtin.dnf:
+      name:
+        - epel-release
+    when:
+      - ansible_distribution == 'CentOS'
+
+  - name: install - import key EPEL
+    ansible.builtin.rpm_key:
+      key: /etc/pki/rpm-gpg/RPM-GPG-KEY-EPEL-8
+    when:
+      - ansible_distribution == 'CentOS'
+
+
+  - name: install - packages for HW host
+    ansible.builtin.dnf:
+      name:
+        - grub2-tools-efi
+        - gpm
+        - hdparm
+        - microcode_ctl
+        - kpartx
+        - lsscsi
+        - nvme-cli
+        - smartmontools
+      state: present
+      update_cache: yes
+      install_recommends: no
+    when: ansible_virtualization_role == 'host'
+
+  # - name: install - remove unwanted packages - virtual systems
+  #   ansible.builtin.dnf:
+  #     name:
+  #       - irqbalance
+  #       - iwl*-firmware
+  #     state: absent
+
+  - name: install - packages - all systems
+    ansible.builtin.dnf:
+      name:
+        - bash-completion
+        - mc
+        - htop
+        - vim
+        - chrony
+        - bzip2
+        - colordiff
+        - curl
+        - diffstat
+        - bind-utils
+        - dosfstools
+        - e2fsprogs
+        - gnupg2
+        - iftop
+        - iotop
+        - ncdu
+        - net-tools
+        - p7zip
+        - patchutils
+        - pciutils
+        - psmisc
+        - rsync
+        - screen
+        - sysstat
+        - traceroute
+        - tree
+        - zip

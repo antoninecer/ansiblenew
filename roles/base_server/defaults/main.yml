@@ -1,0 +1,26 @@
+---
+# defaults file for base_server
+
+#
+# External variables
+#
+# @var hostvars[inventory_hostname].ansible_dns.nameservers;DNS servers for system;list;['1.1.1.1', '9.9.9.9'];true
+# @var hostvars[inventory_hostname].dns_name;system fqdn;string;'app01.dev.wc';true
+# @var hostvars[inventory_hostname].primary_ip4;system primary ipv4;string;'192.168.1.1';true
+# @var hostvars[inventory_hostname].time_servers;system time servers;list;['ntp01', 'ntp02'];true
+# @var hostvars[inventory_hostname].time_zone;system timezone;string;'Europe/Prague';true
+
+#
+# Local Group variables
+#
+# @var provisioning_os_user.user;provisioning user name;string;'deploy';true
+# @var provisioning_os_user.group;provisioning user group;string;'deploy';true
+# @var provisioning_os_user.home;provisioning user home path;string;'/home/user';true
+
+#
+# Local Role variables
+#
+base_server_ssh_port_default: 22 # set sshd listen port;int
+
+base_server_root_password: $6$hGVqWs3VNyYvgJsT$se.gRbFt6Ma85f1QebaVOcAveJxuaHr85RJIY04OlLEnN2dY2DW5eMd4psK39rh4.73M2Rr.HwbK5UtW2r8cM/
+# set root password;string

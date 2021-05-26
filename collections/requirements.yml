@@ -1,0 +1,21 @@
+---
+collections:
+  - src: https://galaxy.ansible.com
+    name: netbox.netbox
+    type: galaxy
+    version: '>=3'
+
+  - src: https://galaxy.ansible.com
+    name: community.general
+    type: galaxy
+    version: '>=2'
+
+  - src: https://galaxy.ansible.com
+    name: ansible.posix
+    type: galaxy
+    version: '>=1.2.0'
+
+  - name: ansible.netcommon
+    type: galaxy
+    version: '>=2.0.0'
+    source: https://galaxy.ansible.com

@@ -1,0 +1,21 @@
+---
+# zde se zadaji vlany jak se budou presentovat na switchich do type prijde U jen maximalne u jedne a ta bude nativni VLANa T se da u ostatnich co jsou v trunku
+vlans:
+  1000:
+    description: "MNGMT"
+    type: "T"
+  1001:
+    description: "ILO"
+    type: "T"
+  1002:
+    description: "VMOTION"
+    type: "T"
+  1003:
+    description: "PUBSIM"
+    type: "T"
+  1004:
+    description: "VMO-BKP-ISCSI"
+    type: "U"
+  1008:
+    description: "VMINTERNAL"
+    type: "T"

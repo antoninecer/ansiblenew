@@ -1,0 +1,51 @@
+---
+- name: configure sshd
+  become: yes
+  become_user: root
+  block:
+
+  # - name: configure[sshd] - deploy pam_sudo_ssh_agent
+  #   template:
+  #     dest: '/etc/pam.d/sudo'
+  #     src: 'templates/pam_sudo_ssh_agent.j2'
+  #     owner: 'root'
+  #     group: 'root'
+  #     mode: '0644'
+  #   notify:
+  #     - restart sshd
+
+  - name: configure[sshd] - update sshd config
+    lineinfile:
+      path: /etc/ssh/sshd_config
+      state: present
+      firstmatch: yes
+      regexp: "^(.?){{ item.name }}"
+      # insertafter: '*regex*'
+      # insertafter: "#{{ item.name }}"
+      line: "{{ item.name }} {{ item.value }}"
+      validate: 'sshd -t -f %s'
+    notify: restart sshd
+    loop:
+      - { name: 'PasswordAuthentication', value: 'no'   }
+      - { name: 'PermitRootLogin',        value: 'prohibit-password' }
+      - { name: 'PermitUserEnvironment',  value: 'yes'  }
+      - { name: 'UsePAM',                 value: 'no'   }
+      - { name: 'Port',                   value: "{{ base_server_ssh_port_default }}" }
+
+  # - name: configure[ssh] - update ssh config
+  #   lineinfile:
+  #     path: /etc/ssh/ssh_config
+  #     state: present
+  #     regexp: "{{ item.name }}"
+  #     insertafter: '{{ item.name }}'
+  #     # insertafter: '*regex*'
+  #     line: "{{ item.value }}"
+  #   loop:
+  #     - { name: '^\sSendEnv', value: '#   SendEnv LANG LC_*' }
+
+
+  - name: configure[sshd] - ensure sshd.service enabled
+    systemd:
+      name: sshd.service
+      enabled:  yes
+      state: started

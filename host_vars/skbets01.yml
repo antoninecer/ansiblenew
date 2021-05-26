@@ -1,0 +1,443 @@
+---
+hostname: skbets01
+ansible_ssh_user: admin
+ansible_ssh_pass: $6$NG1YFhMPQFBP.V$9UloRjdr33nep7Locf4.eaHAmKoHwW5cIgu81MqSy9eHiMQ/p97VExDnqL9YRk1hXSLegmm6fYzPbbRbqi468.
+ansible_network_os: dellemc.os10.os10
+
+os10_system:
+  hostname: skbets01
+os10_ntp:
+  source: mgmt 1/1/1
+  master: 5
+  server:
+  - ip: 192.168.9.233
+    state: present
+  - ip: 195.113.144.201
+    state: present
+  - ip: 195.113.144.238
+    state: present
+os10_interface:
+  ethernet 1/1/1:
+    desc: "pair1"
+    switchport: False
+    admin: up
+  ethernet 1/1/2:
+    desc: "pair2"
+    switchport: False
+    admin: up
+  ethernet 1/1/3:
+    desc: "pair3"
+    switchport: False
+    admin: up
+  ethernet 1/1/4:
+    desc: "pair4"
+    switchport: False
+    admin: up
+  ethernet 1/1/5:
+    desc: "pair5"
+    switchport: False
+    admin: up
+  ethernet 1/1/6:
+    desc: "pair6"
+    switchport: False
+    admin: up
+  ethernet 1/1/7:
+    desc: "pair7"
+    switchport: False
+    admin: up
+  ethernet 1/1/8:
+    desc: "pair8"
+    switchport: False
+    admin: up
+  ethernet 1/1/9:
+    desc: "pair9"
+    switchport: False
+    admin: up
+  ethernet 1/1/10:
+    desc: "pair10"
+    switchport: False
+    admin: up
+  ethernet 1/1/11:
+    desc: "pair11"
+    switchport: False
+    admin: up
+  ethernet 1/1/12:
+    desc: "pair12"
+    switchport: False
+    admin: up
+  Eth 1/1/9:
+    desc: "VLTi"
+    switchport: False
+    admin: up
+  vlan 1000:
+    desc: MNGMT
+    state: present
+    admin: up
+  vlan 1001:
+    desc: ILO
+    state: present
+    admin: up
+  vlan 1002:
+    desc: VMOTION
+    state: present
+    admin: up
+  vlan 1003:
+    desc: PUBSIM
+    state: present
+    admin: up
+  vlan 1004:
+    desc: VMO-BKP-ISCSI
+    state: present
+    admin: up
+  vlan 1008:
+    desc: VMINTERNAL
+    state: present
+    admin: up
+os10_lag:
+  Po 1:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/1
+      state: present
+      mode: active
+    state: present
+  Po 2:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/2
+      state: present
+      mode: active
+    state: present
+  Po 3:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/3
+      state: present
+      mode: active
+    state: present
+  Po 4:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/4
+      state: present
+      mode: active
+    state: present
+  Po 5:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/5
+      state: present
+      mode: active
+    state: present
+  Po 6:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/6
+      state: present
+      mode: active
+    state: present
+  Po 7:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/7
+      state: present
+      mode: active
+    state: present
+  Po 8:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/8
+      state: present
+      mode: active
+    state: present
+  Po 10:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/10
+      state: present
+      mode: active
+    state: present
+  Po 11:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/11
+      state: present
+      mode: active
+    state: present
+  Po 12:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp_fallback_enable: true
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/12
+      state: present
+      mode: active
+    state: present
+os10_vlan:
+  vlan 1000:
+    state: present
+    tagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+  vlan 1001:
+    state: present
+    tagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+  vlan 1002:
+    state: present
+    tagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+  vlan 1003:
+    state: present
+    tagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+  vlan 1004:
+    state: present
+    untagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+  vlan 1008:
+    state: present
+    tagged_members:
+    - port: Po 1
+      state: present
+    - port: Po 2
+      state: present
+    - port: Po 3
+      state: present
+    - port: Po 4
+      state: present
+    - port: Po 5
+      state: present
+    - port: Po 6
+      state: present
+    - port: Po 7
+      state: present
+    - port: Po 8
+      state: present
+    - port: Po 10
+      state: present
+    - port: Po 11
+      state: present
+    - port: Po 12
+      state: present
+os10_vlt:
+  domain: 1
+  backup_destination: 10.227.59.22
+  destination_type: "ipv4"
+  discovery_intf: 1/1/9
+  discovery_intf_state: present
+  peer_routing: True
+  vlt_peers:
+    Po 1:
+      peer_lag: 1
+    Po 2:
+      peer_lag: 2
+    Po 3:
+      peer_lag: 3
+    Po 4:
+      peer_lag: 4
+    Po 5:
+      peer_lag: 5
+    Po 6:
+      peer_lag: 6
+    Po 7:
+      peer_lag: 7
+    Po 8:
+      peer_lag: 8
+    Po 10:
+      peer_lag: 10
+    Po 11:
+      peer_lag: 11
+    Po 12:
+      peer_lag: 12
+  state: present

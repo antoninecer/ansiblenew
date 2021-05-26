@@ -1,0 +1,26 @@
+---
+- hosts: os10_switches
+
+  connection: network_cli
+  collections:
+    - dellemc.os10
+  roles:
+    - os10_system
+    - os10_ntp
+    - os10_interface
+    - os10_vlan
+    - os10_lag
+    - os10_vlt
+  tasks:
+#    - name: run backup running configuration to startup
+#      os10_command:
+#        commands: copy running-configuration startup-configuration
+    - name: run backup and store on local
+      os10_config:
+        lines: ['hostname {{ inventory_hostname }}']
+        backup: yes
+        save: yes
+
+  vars:
+    os10_cfg_generate: yes
+    build_dir: /home/tonda/dell/build

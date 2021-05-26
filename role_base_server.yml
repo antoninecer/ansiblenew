@@ -1,0 +1,7 @@
+---
+- name: install and configure servers - base-role
+  hosts: all
+  gather_facts: yes
+
+  roles:
+    - base_server

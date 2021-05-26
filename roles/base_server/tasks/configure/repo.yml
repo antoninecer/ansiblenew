@@ -1,0 +1,22 @@
+---
+- name: configure apt repositories
+  become: yes
+  become_user: root
+  block:
+
+  # - name: configure[apt] - Add repository key
+  #   apt_key:
+  #     id: "{{ package_repository.key }}"
+  #     keyserver: "{{ package_repository.keyserver }}"
+
+
+- name: configure[apt] - add specified repository into sources list using specified filename
+  ansible.builtin.apt_repository:
+    repo: deb http://dl.google.com/linux/chrome/deb/ stable main
+    state: present
+    filename: google-chrome
+
+- name: configure[apt] - add source repository into sources list
+  ansible.builtin.apt_repository:
+    repo: deb-src http://archive.canonical.com/ubuntu hardy partner
+    state: present

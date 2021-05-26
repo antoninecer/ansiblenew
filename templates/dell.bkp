@@ -1,0 +1,91 @@
+---
+hostname: {{ inventory_hostname }}
+ansible_ssh_user: {{ ansible_ssh_user }}
+ansible_ssh_pass: {{ ansible_ssh_pass }}
+ansible_network_os: dellemc.os10.os10
+
+os10_system:
+  hostname: {{ inventory_hostname }}
+os10_ntp:
+  source: mgmt 1/1/1
+  master: 5
+  server:
+{% for ip in ntp %}
+  - ip: {{ ip }}
+    state: present
+{% endfor %}
+os10_interface:
+{% set ports = [1,2,3,4,5,6,7,8,9,10,11,12] %}
+{% set ns = namespace() %}
+{% set ns.vltip = '10.70.16.11' %}
+{% set ns.vltpot = 'ethernet 1/1/15' %}
+{% set ns.skip = 99 %}
+{% if (device_type == 's4112f-on') or (device_type  == 's5212f-on') %}
+{% set ports = [1,2,3,4,5,6,7,8,9,10,11,12] %}
+{% set vltport = [15] %}
+{% elif device_type == 's4128f-on' %}
+{% set ports = [1,2,3,4,5,6,7,8,9,10,11,12,13,14,15,16,17,18,19,20,21,22,23,24] %}
+{% set vltport = [26] %}
+{% endif %}
+{% for i in (ports) %}
+  ethernet 1/1/{{ i }}:
+    desc: "pair{{ i }}"
+    switchport: False
+    admin: up
+{% if interfaces[i].label == 'VLT' %}
+{% set ns.vltip = interfaces[i].description %}
+{% set ns.vltport =  interfaces[i].name  %}
+{% set ns.skip = i+1  %}
+{% endif %}
+{% endfor %}
+{% set vltportlist = ns.vltport.split(' ') %}
+  {{ ns.vltport }}:
+    desc: "VLTi"
+    switchport: False
+    admin: up
+{% for id, data in vlans.items() %}
+  vlan {{ id }}:
+    desc: {{ data.description }}
+    state: present
+    admin: up
+{% endfor %}
+os10_lag:
+{% for i in (ports) if not i == ns.skip %}
+  Po {{ i }}:
+    switchpoert: true
+    portmode: "trunk"
+    admin: up
+    type: dynamic
+    min_links: 1
+    lacp:
+      long_timeout: true
+      fast_switchover: true
+    channel_members:
+    - port: ethernet 1/1/{{ i }}
+      state: present
+      mode: active
+    state: present
+{% endfor %}
+os10_vlan:
+{% for v in (vlans) %}
+  vlan {{ v }}:
+    state: present
+    tagged_members:
+{% for i in (ports) if not i == ns.skip %}
+    - port: Po {{ i }}
+      state: present
+{% endfor %}
+{% endfor %}
+os10_vlt:
+  domain: 1
+  backup_destination: {{ ns.vltip }}
+  destination_type: "ipv4"
+  discovery_intf: {{ vltportlist[1] }}
+  discovery_intf_state: present
+  peer_routing: True
+  vlt_peers:
+{% for i in (ports) if not i == ns.skip %}
+    Po {{ i }}:
+      peer_lag: {{ i }}
+{% endfor %}
+  state: present

@@ -1,0 +1,7 @@
+{%   if hostvars[inventory_hostname].dns_servers is defined %}
+{%     for nameserver in hostvars[inventory_hostname].dns_servers %}
+nameserver {{ nameserver }}
+{%     endfor %}
+{%   endif %}
+options rotate edns0
+search {{ hostvars[inventory_hostname].dns_name.split('.')[-2:] | join('.') | lower }}

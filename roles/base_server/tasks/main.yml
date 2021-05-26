@@ -1,0 +1,61 @@
+---
+# tasks file for base_server
+
+#
+# Install tasks
+#
+- name: include install tasks
+  tags:
+    - install
+  include: install-debian.yml
+  when:
+    - ansible_os_family == 'Debian'
+
+- name: include install tasks
+  tags:
+    - install
+  include: install-redhat.yml
+  when:
+    - ansible_os_family == 'RedHat'
+
+
+
+#
+# Configure tasks
+#
+
+- name: configure time
+  tags:
+    - configure
+    - c-time
+  include: configure/time.yml
+
+- name: configure network
+  tags:
+    - configure
+    - c-network
+  include: configure/network.yml
+
+- name: configure sysctl
+  tags:
+    - configure
+    - c-sysctl
+  include: configure/sysctl.yml
+
+- name: configure sshd
+  tags:
+    - configure
+    - c-sshd
+  include: configure/ssh.yml
+
+- name: configure tools
+  tags:
+    - configure
+    - c-tools
+  include: configure/tools.yml
+
+- name: configure base
+  tags:
+    - configure
+    - c-base
+  include: configure/base.yml
